@@ -13,6 +13,18 @@ function AddPostForm({ onAddPost }) {
     setBody("");
   }
 
+  function handleTitleInputChange(e) {
+    // maxLength 100 ตัวอักษร
+    if (e.target.value.length > 100) return;
+    setTitle(e.target.value);
+  }
+
+  function handleBodyInputChange(e) {
+    // maxLength 500 ตัวอักษร
+    if (e.target.value.length > 500) return;
+    setBody(e.target.value);
+  }
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -28,11 +40,16 @@ function AddPostForm({ onAddPost }) {
         เพิ่มโพสต์ใหม่
       </h3>
 
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.875rem", color: "#64748b", marginBottom: "0.25rem" }}>
+        <span>หัวข้อโพสต์</span>
+        <span>{title.length}/100</span>
+      </div>
       <input
+        maxLength={100}
         type="text"
         placeholder="หัวข้อโพสต์"
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={handleTitleInputChange}
         style={{
           width: "100%",
           padding: "0.5rem",
@@ -45,9 +62,10 @@ function AddPostForm({ onAddPost }) {
       />
 
       <textarea
+        maxLength={500}
         placeholder="เนื้อหาโพสต์"
         value={body}
-        onChange={(e) => setBody(e.target.value)}
+        onChange={handleBodyInputChange}
         rows={3}
         style={{
           width: "100%",
