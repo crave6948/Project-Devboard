@@ -2,7 +2,7 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
-import PostCount from "./components/PostCount";
+// import PostCount from "./components/PostCount";
 import AddPostForm from "./components/AddPostForm";
 
 const INITIAL_POSTS = [
