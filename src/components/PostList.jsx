@@ -1,25 +1,40 @@
 import PostCard from "./PostCard";
 import { useState } from "react";
+import PostCount from "./PostCount";
 
 function PostList({ posts, favorites, onToggleFavorite }) {
   const [search, setSearch] = useState("");
+  const [sortOrder, setSortOrder] = useState("desc");
 
   // กรองโพสต์ตาม search
   const filtered = posts.filter((post) =>
     post.title.toLowerCase().includes(search.toLowerCase()),
   );
 
+  // เรียงโพสต์ตาม id (id มากกว่า = ใหม่กว่า)
+  const sortedPosts = [...filtered].sort((a, b) =>
+    sortOrder === "desc" ? b.id - a.id : a.id - b.id,
+  );
+
+  function handleToggleSort() {
+    setSortOrder((prev) => (prev === "desc" ? "asc" : "desc"));
+  }
+
   return (
     <div>
-      <h2
-        style={{
-          color: "#2d3748",
-          borderBottom: "2px solid #1e40af",
-          paddingBottom: "0.5rem",
-        }}
-      >
-        โพสต์ล่าสุด
-      </h2>
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "2px solid #1e40af",
+        marginBottom: "1rem",
+      }}>
+        <h2
+          style={{
+            color: "#2d3748",
+          }}
+        >
+          โพสต์ล่าสุด
+        </h2>
+        <PostCount count={posts.length} />
+      </div>
 
       {/* Search Input */}
       <input
@@ -38,6 +53,23 @@ function PostList({ posts, favorites, onToggleFavorite }) {
         }}
       />
 
+      <button
+        onClick={handleToggleSort}
+        style={{
+          background: "#eff6ff",
+          color: "#1e40af",
+          border: "1px solid #bfdbfe",
+          borderRadius: "6px",
+          padding: "0.45rem 0.8rem",
+          cursor: "pointer",
+          marginBottom: "1rem",
+          fontSize: "0.95rem",
+          fontWeight: 600,
+        }}
+      >
+        {sortOrder === "desc" ? "🔽 ใหม่สุดก่อน" : "🔼 เก่าสุดก่อน"}
+      </button>
+
       {/* ถ้าไม่พบโพสต์ */}
       {filtered.length === 0 && (
         <p style={{ color: "#718096", textAlign: "center", padding: "2rem" }}>
@@ -46,7 +78,7 @@ function PostList({ posts, favorites, onToggleFavorite }) {
       )}
 
       {/* แสดงรายการโพสต์ */}
-      {filtered.map((post) => (
+      {sortedPosts.map((post) => (
         <PostCard
           key={post.id}
           title={post.title}
