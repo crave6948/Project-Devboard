@@ -120,8 +120,7 @@ function PostList({ favorites, onToggleFavorite }) {
       {sortedPosts.map((post) => (
         <PostCard
           key={post.id}
-          title={post.title}
-          body={post.body}
+          post={post}
           isFavorite={favorites.includes(post.id)}
           onToggleFavorite={() => onToggleFavorite(post.id)}
         />
