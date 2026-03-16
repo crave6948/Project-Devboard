@@ -2,53 +2,35 @@ import { useState, useEffect } from "react";
 import PostCard from "./PostCard";
 import LoadingSpinner from "./LoadingSpinner";
 import PostCount from "./PostCount";
+import useFetch from "../hooks/useFetch";
 
 function PostList({ favorites, onToggleFavorite }) {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data: posts, loading, error } = useFetch("https://jsonplaceholder.typicode.com/posts");
+
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
 
-  useEffect(() => {
-  async function fetchPosts() {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-      if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
-      const data = await res.json();
-      setPosts(data.slice(0, 20)); // เอาแค่ 20 รายการแรก
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-  fetchPosts();
-  }, []); // [] = ทำครั้งเดียวตอน component mount
-
-  // กรองโพสต์ตาม search
-  const filtered = posts.filter((post) =>
-    post.title.toLowerCase().includes(search.toLowerCase()),
-  );
-
   if (loading) return <LoadingSpinner />;
   if (error)
-  return (
-    <div
-      style={{
-        padding: "1.5rem",
-        background: "#fff5f5",
-        border: "1px solid #fc8181",
-        borderRadius: "8px",
-        color: "#c53030",
-      }}
-    >
+    return (
+  <div
+  style={{
+    padding: "1.5rem",
+    background: "#fff5f5",
+    border: "1px solid #fc8181",
+    borderRadius: "8px",
+    color: "#c53030",
+  }}
+  >
       เกิดข้อผิดพลาด: {error}
     </div>
   );
+  const limitedPosts = posts.slice(0, 20);
 
+  // กรองโพสต์ตาม search
+  const filtered = limitedPosts.filter((post) =>
+    post.title.toLowerCase().includes(search.toLowerCase()),
+  );
 
   // เรียงโพสต์ตาม id (id มากกว่า = ใหม่กว่า)
   const sortedPosts = [...filtered].sort((a, b) =>
