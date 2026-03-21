@@ -10,7 +10,8 @@ export function FavoritesProvider({ children }) {
     const saved = localStorage.getItem("favorites");
     return saved ? JSON.parse(saved) : [];
   });
-
+  //ระดับ 3 — Favorites คงอยู่ใน Context + localStorage
+  
   // เมื่อ favorites เปลี่ยนแปลง ให้บันทึกลง localStorage ทันที
   useEffect(() => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
