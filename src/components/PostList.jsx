@@ -3,8 +3,10 @@ import PostCard from "./PostCard";
 import LoadingSpinner from "./LoadingSpinner";
 import PostCount from "./PostCount";
 import useFetch from "../hooks/useFetch";
+import { useFavorites } from "../context/FavoritesContext";
 
-function PostList({ favorites, onToggleFavorite }) {
+function PostList() {
+  const { favorites, toggleFavorite } = useFavorites();
   const { data: posts, loading, error } = useFetch("https://jsonplaceholder.typicode.com/posts");
 
   const [search, setSearch] = useState("");
@@ -104,7 +106,7 @@ function PostList({ favorites, onToggleFavorite }) {
           key={post.id}
           post={post}
           isFavorite={favorites.includes(post.id)}
-          onToggleFavorite={() => onToggleFavorite(post.id)}
+          onToggleFavorite={() => toggleFavorite(post.id)}
         />
       ))}
     </div>
