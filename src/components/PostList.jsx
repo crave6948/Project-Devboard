@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import PostCard from "./PostCard";
 import LoadingSpinner from "./LoadingSpinner";
 import PostCount from "./PostCount";
@@ -9,7 +10,10 @@ function PostList() {
   const { favorites, toggleFavorite } = useFavorites();
   const { data: posts, loading, error } = useFetch("https://jsonplaceholder.typicode.com/posts");
 
-  const [search, setSearch] = useState("");
+  const [searchParams] = useSearchParams();
+  const q = searchParams.get("q"); // ได้ "react"
+
+  const [search, setSearch] = useState(() => q || ""); // ถ้า q มีค่า ให้ใช้ q เป็นค่าเริ่มต้น, ถ้าไม่มี ให้ใช้ ""
   const [sortOrder, setSortOrder] = useState("desc");
 
   if (loading) return <LoadingSpinner />;
